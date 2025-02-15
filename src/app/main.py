@@ -7,7 +7,7 @@ from typing import List, Dict
 import logging.config
 
 from sqlite_db.execute import execute_query
-from src.llm.generator import (
+from llm.generator import (
     generate_sql_query,
     validate_sql_query,
     generate_natural_response,
