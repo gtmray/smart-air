@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natural Language Query Interface</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Natural Language Query Interface</h1>
+
+        <form hx-post="/process-query" hx-target="#results" hx-swap="outerHTML">
+            <div class="form-group">
+                <label for="query">Enter your query:</label>
+                <textarea
+                    id="query"
+                    name="query"
+                    rows="3"
+                    placeholder="Example: Which day of the week typically sees the highest number of delayed departures?"
+                    required
+                ></textarea>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="results"></div>
+    </div>
+</body>
+</html>
