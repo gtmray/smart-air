@@ -1,4 +1,3 @@
-import os
 import sqlite3
 import pandas as pd
 from pathlib import Path
@@ -28,16 +27,10 @@ def csv_to_sqlite(db_name: str, csv_files: dict, n_rows: int = None):
 
 
 def main():
+    raw_csv_path = Path(__file__).parent / "raw_data"
+    DATABASE = Path(__file__).parent / "flights.db"
 
-    raw_csv_path = Path.joinpath(Path(__file__).parent, "raw_data")
-    DATABASE = Path.joinpath(Path(__file__).parent, "flights.db")
-
-    # Table names and CSV files
-    csv_files = {
-        "airlines": os.path.join(raw_csv_path, "airlines.csv"),
-        "airports": os.path.join(raw_csv_path, "airports.csv"),
-        "flights": os.path.join(raw_csv_path, "flights.csv"),
-    }
+    csv_files = {file.stem: file for file in raw_csv_path.glob("*.csv")}
     csv_to_sqlite(DATABASE, csv_files, n_rows=10000)
 
 
