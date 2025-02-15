@@ -56,7 +56,7 @@ Requirements:
 
 Example JOIN pattern:
 FROM orders AS o
-INNER JOIN customers AS c 
+INNER JOIN customers AS c
   ON o.customer_id = c.id
 
 Additional Instruction:
