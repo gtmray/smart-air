@@ -1,0 +1,31 @@
+<div class="results-container">
+    {% if data %}
+        <h5>{{ message }}</h5>
+        <table>
+            <thead>
+                <tr>
+                    {% for column in columns %}
+                        <th>{{ column|title|replace('_', ' ') }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                    <tr>
+                        {% for column in columns %}
+                            <td>
+                                {% if row[column] is number %}
+                                    {{ "%.2f"|format(row[column]) if row[column] is float else row[column] }}
+                                {% else %}
+                                    {{ row[column] }}
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-results">{{message}}</p>
+    {% endif %}
+</div>
