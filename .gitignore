@@ -2,7 +2,6 @@
 test.*
 test**
 *test*
-!tests
 **/__pycache__
 .vscode
 venv
