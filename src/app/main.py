@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from fastapi import FastAPI, Request, Form
 from fastapi.staticfiles import StaticFiles
@@ -104,4 +105,4 @@ async def handle_query(request: Request, query: str = Form(...)):
 
 if __name__ == "__main__":
 
-    uvicorn.run(app, host="localhost", port=8000)
+    uvicorn.run(app, host=os.getenv("HOSTNAME"), port=int(os.getenv("PORT")))
