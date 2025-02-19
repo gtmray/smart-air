@@ -9,7 +9,7 @@ from .prompts import (
 )
 
 
-def generate_sql_query(question: str, temperature: float = 0) -> dict:
+async def generate_sql_query(question: str, temperature: float = 0) -> dict:
     """Generate SQL query from the given question.
 
     Args:
@@ -24,7 +24,7 @@ def generate_sql_query(question: str, temperature: float = 0) -> dict:
         client = LLMClient(temperature=temperature)
         input_msg = {"question": question}
 
-        result = client.run(
+        result = await client.arun(
             input_message=input_msg,
             system_message=SQL_GEN_SYSTEM_PROMPT,
             human_message=SQL_GEN_HUMAN_PROMPT,
@@ -35,7 +35,7 @@ def generate_sql_query(question: str, temperature: float = 0) -> dict:
         return {"status": False, "result": None}
 
 
-def validate_sql_query(sql_query: str) -> dict:
+async def validate_sql_query(sql_query: str) -> dict:
     """Validate the given SQL query.
 
     Args:
@@ -48,7 +48,7 @@ def validate_sql_query(sql_query: str) -> dict:
         client = LLMClient(temperature=0)
         input_msg = {"query": sql_query}
 
-        result = client.run(
+        result = await client.arun(
             input_message=input_msg,
             system_message=SQL_VAL_SYSTEM_PROMPT,
             human_message=SQL_VAL_HUMAN_PROMPT,
@@ -60,7 +60,7 @@ def validate_sql_query(sql_query: str) -> dict:
         return {"status": False, "result": None}
 
 
-def generate_natural_response(question: str, result: str) -> dict:
+async def generate_natural_response(question: str, result: str) -> dict:
     """Generate natural response for the given question and result
 
     Args:
@@ -74,7 +74,7 @@ def generate_natural_response(question: str, result: str) -> dict:
         client = LLMClient(temperature=0)
         input_msg = {"question": question, "result": result}
 
-        result = client.run(
+        result = await client.arun(
             input_message=input_msg,
             system_message=NATURAL_SYSTEM_PROMPT,
             human_message=NATURAL_HUMAN_PROMPT,
