@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import logging.config
 
 from sqlite_db.execute import execute_query
@@ -26,9 +26,11 @@ logger = logging.getLogger()
 database_file_path = parent_dir.parent / "sqlite_db" / "flights.db"
 
 
-def process_query(database_file_path: str, user_query: str) -> List[Dict]:
+async def process_query(
+    database_file_path: str, user_query: str
+) -> Tuple[str, List[Dict]]:
     logger.info(f"User Query: {user_query}")
-    sql_query = generate_sql_query(user_query)
+    sql_query = await generate_sql_query(user_query)
     logger.info(f"SQL Query: {sql_query}")
 
     if not sql_query.get("status"):
@@ -42,7 +44,7 @@ def process_query(database_file_path: str, user_query: str) -> List[Dict]:
             "Sorry, I can only answer questions related to flights data.",
             [],
         )
-    validate_query = validate_sql_query(sql_query)
+    validate_query = await validate_sql_query(sql_query)
     logger.info(f"Validated Query: {validate_query}")
     validate_query = format_json(validate_query.get("result"))
     logger.info(f"Formatted Validated Query: {validate_query}")
@@ -56,7 +58,7 @@ def process_query(database_file_path: str, user_query: str) -> List[Dict]:
     result, _ = execute_query(db_name=database_file_path, query=query)
     logger.info(f"Result after executing query: {result}")
     if result:
-        natural_response = generate_natural_response(user_query, result)
+        natural_response = await generate_natural_response(user_query, result)
         logger.info(f"Natural Response: {natural_response}")
         return natural_response.get("result"), result
     else:
@@ -82,7 +84,7 @@ async def read_root(request: Request):
 
 @app.post("/process-query")
 async def handle_query(request: Request, query: str = Form(...)):
-    msg, result_data = process_query(
+    msg, result_data = await process_query(
         database_file_path=database_file_path, user_query=query
     )
 
@@ -104,5 +106,4 @@ async def handle_query(request: Request, query: str = Form(...)):
 
 
 if __name__ == "__main__":
-
     uvicorn.run(app, host=os.getenv("HOSTNAME"), port=int(os.getenv("PORT")))
