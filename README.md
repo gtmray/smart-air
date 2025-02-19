@@ -44,10 +44,8 @@ OPENAI_API_KEY=<YOUR_API_KEY>
 OPENAI_DEPLOYMENT_NAME=<YOUR_DEPLOYMENT_NAME>
 ```
 
-# Store raw files downloaded from Kaggle using KaggleHub
-```bash
-https://github.com/Kaggle/kagglehub
-```
+# Store raw files downloaded from Kaggle using KaggleHub to src/sqlite_db/raw_data
+See: https://github.com/Kaggle/kagglehub or download from kaggle UI
 
 # Create database
 ```bash
