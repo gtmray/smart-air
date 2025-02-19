@@ -3,7 +3,6 @@ import pandas as pd
 
 
 def execute_query(db_name: str, query: str):
-    # """Execute SQL query and return results"""
     """Execute SQL query from given database
 
     Args:
@@ -16,9 +15,9 @@ def execute_query(db_name: str, query: str):
         if df.empty:
             return None, "No results found"
         return df.to_dict("records"), None
-    except sqlite3.Error as e:
+    except pd.errors.DatabaseError as e:
         return None, f"SQL Error: {str(e)}"
     except Exception as e:
-        return None, f"Error: {str(e)}"
+        return None, f"Unexpected Error: {str(e)}"
     finally:
         conn.close()
