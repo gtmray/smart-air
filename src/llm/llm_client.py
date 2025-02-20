@@ -1,17 +1,18 @@
-from typing import Dict
 import os
 import base64
-from openai import AsyncAzureOpenAI, AzureOpenAI
+from typing import Dict
 import random
 from dotenv import load_dotenv, find_dotenv
+from openai import AsyncOpenAI, OpenAI, AsyncAzureOpenAI, AzureOpenAI
 
 # Load environment variables from .env file
 load_dotenv(find_dotenv())
 
 # Constants for environment variable keys
-API_KEY_ENV = "OPENAI_API_KEY"
-API_BASE_ENV = "OPENAI_API_BASE"
-DEPLOYMENT_NAME_ENV = "OPENAI_DEPLOYMENT_NAME"
+API_TYPE = "API_TYPE"
+API_KEY_ENV = "API_KEY"
+API_BASE_ENV = "API_BASE_URL"
+MODEL_ENV = "MODEL_NAME"
 
 
 class LLMClient:
@@ -42,14 +43,16 @@ class LLMClient:
         self.image_detail = image_detail
 
         api_key = os.getenv(API_KEY_ENV)
-        azure_endpoint = os.getenv(API_BASE_ENV)
+        endpoint = os.getenv(API_BASE_ENV)
 
-        self.async_client = AsyncAzureOpenAI(
-            api_key=api_key, azure_endpoint=azure_endpoint
-        )
-        self.client = AzureOpenAI(
-            api_key=api_key, azure_endpoint=azure_endpoint
-        )
+        if os.getenv(API_TYPE) == "azure":
+            self.async_client = AsyncAzureOpenAI(
+                api_key=api_key, azure_endpoint=endpoint
+            )
+            self.client = AzureOpenAI(api_key=api_key, azure_endpoint=endpoint)
+        else:
+            self.async_client = AsyncOpenAI(api_key=api_key, base_url=endpoint)
+            self.client = OpenAI(api_key=api_key, base_url=endpoint)
 
     @staticmethod
     def _encode_image(img_path: str) -> str:
@@ -142,7 +145,7 @@ class LLMClient:
         )
 
         response = await self.async_client.chat.completions.create(
-            model=os.getenv(DEPLOYMENT_NAME_ENV),
+            model=os.getenv(MODEL_ENV),
             response_format={"type": response_format},
             temperature=self.temperature,
             presence_penalty=self.presence_penalty,
@@ -182,7 +185,7 @@ class LLMClient:
         )
 
         response = self.client.chat.completions.create(
-            model=os.getenv(DEPLOYMENT_NAME_ENV),
+            model=os.getenv(MODEL_ENV),
             response_format={"type": response_format},
             temperature=self.temperature,
             presence_penalty=self.presence_penalty,
