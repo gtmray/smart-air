@@ -1,27 +1,8 @@
-DB_ENGINE = "SQLite"
-SCHEMA = """
-Database Schema:
-- airlines (IATA_CODE, AIRLINE)
-- airports (IATA_CODE, AIRPORT, CITY, STATE, COUNTRY, LATITUDE, LONGITUDE)
-- flights (
-    YEAR, MONTH, DAY, DAY_OF_WEEK, AIRLINE, FLIGHT_NUMBER, TAIL_NUMBER,
-    ORIGIN_AIRPORT, DESTINATION_AIRPORT, SCHEDULED_DEPARTURE, DEPARTURE_TIME,
-    DEPARTURE_DELAY, TAXI_OUT, WHEELS_OFF, SCHEDULED_TIME, ELAPSED_TIME,
-    AIR_TIME, DISTANCE, WHEELS_ON, TAXI_IN, SCHEDULED_ARRIVAL, ARRIVAL_TIME,
-    ARRIVAL_DELAY, DIVERTED, CANCELLED, CANCELLATION_REASON,
-    AIR_SYSTEM_DELAY, SECURITY_DELAY, AIRLINE_DELAY, LATE_AIRCRAFT_DELAY,
-    WEATHER_DELAY
-)
+from sqlite_db.db_constants import TABLES, SCHEMA, DB_ENGINE
 
-Table Relationships:
-- airlines.IATA_CODE = flights.AIRLINE
-- airports.IATA_CODE = flights.ORIGIN_AIRPORT
-- airports.IATA_CODE = flights.DESTINATION_AIRPORT
-"""
-
-SQL_GEN_SYSTEM_PROMPT = """\
+SQL_GEN_SYSTEM_PROMPT = f"""\
 You are an expert SQL query generator. Your task is to produce correct, optimized, and syntactically valid SQL queries based on the provided schema and DB engine specifications. Always follow the instructions exactly and output only the final SQL query without any commentary.
-If the user is asking something out of the scope of this information (not related to queries regarding airlines, flights or airports), return None.
+If the user is asking something out of the scope of this information (not related to queries regarding f{", ".join(TABLES)}), return None.
 """
 
 SQL_GEN_HUMAN_PROMPT = f"""
@@ -60,7 +41,7 @@ INNER JOIN customers AS c
   ON o.customer_id = c.id
 
 Additional Instruction:
-If the user's question is not related to queries regarding airlines, flights, or airports, return None.
+If the user's question is not related to queries regarding {", ".join(TABLES)}, return None.
 
 Return either the final SQL code using {DB_ENGINE} syntax or None.
 """

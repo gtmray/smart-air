@@ -99,7 +99,7 @@ async def handle_query(request: Request, query: str = Form(...)):
             "request": request,
             "query": query,
             "columns": columns,
-            "message": msg,
+            "message": msg if msg is not None else "",
             "data": result_data,
         },
     )
