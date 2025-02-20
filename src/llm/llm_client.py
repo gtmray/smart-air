@@ -61,7 +61,6 @@ class LLMClient:
         self.frequency_penalty = frequency_penalty
         self.langfuse_enable = langfuse_enable
         self.track_model_name = track_model_name
-        self.async_client, self.client = self._create_client()
 
         if self.langfuse_enable:
             self.langfuse_client = Langfuse()
@@ -73,6 +72,7 @@ class LLMClient:
             self.trace = self.langfuse_client.trace(
                 id=trace_id, name=trace_name, metadata=self._prepare_metadata()
             )
+        self.async_client, self.client = self._create_client()
 
     def _create_client(self) -> tuple:
         """Create the LLM client.
@@ -412,7 +412,7 @@ class LLMClient:
         """
         metadata.pop("model", None)
         response = await self.async_client.chat.completions.create(
-            messages=messages, model=self.getenv(MODEL_ENV), **metadata
+            messages=messages, model=os.getenv(MODEL_ENV), **metadata
         )
         response_content = response.choices[0].message.content
         response_format = metadata.get("response_format", {}).get(
