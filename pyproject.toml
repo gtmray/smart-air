@@ -29,6 +29,7 @@ python-multipart = "^0.0.20"
 uvicorn = "^0.34.0"
 pytest = "^8.3.4"
 pytest-asyncio = "^0.25.3"
+langfuse = "^2.59.3"
 
 
 [build-system]
