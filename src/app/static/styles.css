@@ -90,3 +90,11 @@ tr:hover {
     background-color: #f8d7da;
     border-radius: 4px;
 }
+
+.feedback-container {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}

@@ -29,3 +29,26 @@
         <p class="no-results">{{message}}</p>
     {% endif %}
 </div>
+<div class="feedback-container">
+    <h3>Rate this output for Helpfulness</h3>
+    <form hx-post="/submit-feedback" hx-target="#feedback-results" hx-swap="innerHTML">
+
+        <div class="form-group">
+            <label for="rating">Helpfulness</label>
+            <select id="rating" name="rating" required>
+                <option value="">Select a score</option>
+                <option value="1">1 - Poor</option>
+                <option value="2">2 - Fair</option>
+                <option value="3">3 - Good</option>
+                <option value="4">4 - Very Good</option>
+                <option value="5">5 - Excellent</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="comment">Comment:</label>
+            <textarea id="comment" name="comment" rows="3" placeholder="Enter your feedback"></textarea>
+        </div>
+        <button type="submit">Submit Feedback</button>
+    </form>
+    <div id="feedback-results"></div>
+</div>
