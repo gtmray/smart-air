@@ -1,3 +1,4 @@
+from config.llm_config import LLMConfig
 from .llm_client import LLMClient
 from .prompts import (
     SQL_GEN_HUMAN_PROMPT,
@@ -9,25 +10,33 @@ from .prompts import (
 )
 
 
-async def generate_sql_query(question: str, temperature: float = 0) -> dict:
+client = LLMClient(
+    temperature=LLMConfig.temperature,
+    langfuse_enable=LLMConfig.langfuse_enable,
+    trace_id=LLMConfig.trace_id,
+    trace_name=LLMConfig.trace_name,
+    track_model_name=LLMConfig.track_model_name,
+)
+
+
+async def generate_sql_query(question: str) -> dict:
     """Generate SQL query from the given question.
 
     Args:
         question (str): The question to generate SQL query.
-        temperature (float, optional): Sampling temperature to use.
 
     Returns:
         dict: Dictionary with keys status and result.
     """
 
     try:
-        client = LLMClient(temperature=temperature)
         input_msg = {"question": question}
 
         result = await client.arun(
             input_message=input_msg,
             system_message=SQL_GEN_SYSTEM_PROMPT,
             human_message=SQL_GEN_HUMAN_PROMPT,
+            generation_name="SQL Query Generation",
         )
         return {"status": True, "result": result if result != "None" else None}
     except Exception as e:
@@ -45,13 +54,13 @@ async def validate_sql_query(sql_query: str) -> dict:
         dict: Dictionary with keys status and result.
     """
     try:
-        client = LLMClient(temperature=0)
         input_msg = {"query": sql_query}
 
         result = await client.arun(
             input_message=input_msg,
             system_message=SQL_VAL_SYSTEM_PROMPT,
             human_message=SQL_VAL_HUMAN_PROMPT,
+            generation_name="SQL Query Validation",
         )
         return {"status": True, "result": result}
 
@@ -71,13 +80,13 @@ async def generate_natural_response(question: str, result: str) -> dict:
         dict: Dictionary with keys status and result.
     """
     try:
-        client = LLMClient(temperature=0)
         input_msg = {"question": question, "result": result}
 
         result = await client.arun(
             input_message=input_msg,
             system_message=NATURAL_SYSTEM_PROMPT,
             human_message=NATURAL_HUMAN_PROMPT,
+            generation_name="Natural Response Generation",
         )
         return {"status": True, "result": result}
 
