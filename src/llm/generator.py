@@ -1,4 +1,3 @@
-from config.llm_config import LLMConfig
 from .llm_client import LLMClient
 from .prompts import (
     SQL_GEN_HUMAN_PROMPT,
@@ -10,19 +9,11 @@ from .prompts import (
 )
 
 
-client = LLMClient(
-    temperature=LLMConfig.temperature,
-    langfuse_enable=LLMConfig.langfuse_enable,
-    trace_id=LLMConfig.trace_id,
-    trace_name=LLMConfig.trace_name,
-    track_model_name=LLMConfig.track_model_name,
-)
-
-
-async def generate_sql_query(question: str) -> dict:
+async def generate_sql_query(llm_client: LLMClient, question: str) -> dict:
     """Generate SQL query from the given question.
 
     Args:
+        llm_client (LLMClient): The LLM client object.
         question (str): The question to generate SQL query.
 
     Returns:
@@ -32,7 +23,7 @@ async def generate_sql_query(question: str) -> dict:
     try:
         input_msg = {"question": question}
 
-        result = await client.arun(
+        result = await llm_client.arun(
             input_message=input_msg,
             system_message=SQL_GEN_SYSTEM_PROMPT,
             human_message=SQL_GEN_HUMAN_PROMPT,
@@ -44,10 +35,11 @@ async def generate_sql_query(question: str) -> dict:
         return {"status": False, "result": None}
 
 
-async def validate_sql_query(sql_query: str) -> dict:
+async def validate_sql_query(llm_client: LLMClient, sql_query: str) -> dict:
     """Validate the given SQL query.
 
     Args:
+        llm_client (LLMClient): The LLM client object.
         sql_query (str): The SQL query to validate.
 
     Returns:
@@ -56,7 +48,7 @@ async def validate_sql_query(sql_query: str) -> dict:
     try:
         input_msg = {"query": sql_query}
 
-        result = await client.arun(
+        result = await llm_client.arun(
             input_message=input_msg,
             system_message=SQL_VAL_SYSTEM_PROMPT,
             human_message=SQL_VAL_HUMAN_PROMPT,
@@ -69,10 +61,13 @@ async def validate_sql_query(sql_query: str) -> dict:
         return {"status": False, "result": None}
 
 
-async def generate_natural_response(question: str, result: str) -> dict:
+async def generate_natural_response(
+    llm_client: LLMClient, question: str, result: str
+) -> dict:
     """Generate natural response for the given question and result
 
     Args:
+        llm_client (LLMClient): The LLM client object.
         question (str): User question
         result (str): Result of the query
 
@@ -82,7 +77,7 @@ async def generate_natural_response(question: str, result: str) -> dict:
     try:
         input_msg = {"question": question, "result": result}
 
-        result = await client.arun(
+        result = await llm_client.arun(
             input_message=input_msg,
             system_message=NATURAL_SYSTEM_PROMPT,
             human_message=NATURAL_HUMAN_PROMPT,
