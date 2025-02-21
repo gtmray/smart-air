@@ -269,7 +269,6 @@ class LLMClient:
             response_content = await self._get_response_content_async(
                 messages, metadata, gen_obj
             )
-
             self._update_trace(gen_obj, response_content)
         except Exception as e:
             response_content = ""
@@ -324,7 +323,6 @@ class LLMClient:
                 messages, metadata, gen_obj
             )
             self._update_trace(gen_obj, response_content)
-
         except Exception as e:
             response_content = ""
             self._update_trace(
@@ -483,6 +481,33 @@ class LLMClient:
         """
         return json.loads(content.strip("```json\n"), strict=strict, **kwargs)
 
+    def score_generation(
+        self,
+        score_value: Union[int, float, str],
+        score_name: str,
+        data_type: str = "NUMERIC",
+        comment: str = None,
+    ):
+        """
+        Score a specific generation in the current trace.
+
+        Args:
+            score_value (int|float|str): The score value (e.g., a rating).
+            score_name (str): The name for the score
+            data_type (str): One of "NUMERIC", "CATEGORICAL", or "BOOLEAN".
+            comment (str): Optional comment to attach with the score.
+        """
+        try:
+            self.langfuse_client.score(
+                trace_id=self.trace.id,
+                name=score_name,
+                value=score_value,
+                data_type=data_type,
+                comment=comment,
+            )
+        except Exception as e:
+            print(f"Error scoring generation: {e}")
+
     def __repr__(self) -> str:
         """
         Return a string representation of the LLMClient instance.
@@ -505,7 +530,7 @@ class LLMClient:
         """
         return (
             "LLMClient for calling the LLM model client with params: "
-            f"temperature={self.temperature},"
+            f"temperature={self.temperature}, "
             f"presence_penalty={self.presence_penalty}, "
             f"frequency_penalty={self.frequency_penalty}"
         )
