@@ -56,7 +56,9 @@ async def submit_feedback(
     rating: int = Form(...),
     comment: str = Form(""),
 ):
-    score_feedback(rating=rating, score_name="Helpfulness", comment=comment)
+    await score_feedback(
+        rating=rating, score_name="Helpfulness", comment=comment
+    )
     response_html = f"""
     <p>Thank you for your feedback!</p>
     <p><strong>Rating:</strong> {rating}</p>
