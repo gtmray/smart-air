@@ -2,6 +2,10 @@
 
 A natural language interface for querying airline/flight data using LLMs
 
+## Workflow Diagram
+
+![Workflow Diagram](images/workflow.png)
+
 ## Features
 
 - ✈️ Natural language to SQL conversion using LLMs
@@ -17,6 +21,7 @@ A natural language interface for querying airline/flight data using LLMs
 - Python 3.9+
 
 ### Setup
+
 # Clone the repository
 ```bash
 git clone https://github.com/gtmray/smart-air
@@ -33,7 +38,7 @@ pip install poetry
 poetry install
 ```
 
-# Configure environment variables for LLM access and API configurations(in .env file)
+# Configure environment variables for LLM access and API configurations (in .env file)
 ```bash
 HOSTNAME=localhost
 PORT=<YOUR_AVAILABLE_PORT>
@@ -44,7 +49,6 @@ OPENAI_API_VERSION=<YOUR_API_VERSION_IF_USING_AZURE_API_TYPE>
 API_BASE_URL=<YOUR_API_BASE_URL>
 API_KEY=<YOUR_API_KEY>
 MODEL_NAME=<YOUR_MODEL_NAME>
-
 ```
 
 # Store raw files downloaded from Kaggle using KaggleHub to src/sqlite_db/raw_data

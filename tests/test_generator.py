@@ -21,7 +21,7 @@ async def test_generate_sql_query_success(mock_llm):
     mock_llm.arun.return_value = mock_response
 
     expected_response = {"status": True, "result": mock_response}
-    result = await generate_sql_query("test query")
+    result = await generate_sql_query(mock_llm, "test query")
     assert result == expected_response
 
 
@@ -30,7 +30,7 @@ async def test_validate_sql_query_invalid(mock_llm):
     mock_response = "{'is_valid': true}"
     mock_llm.arun.return_value = mock_response
     expected_response = {"status": True, "result": mock_response}
-    result = await validate_sql_query("SELECT * FROM flights")
+    result = await validate_sql_query(mock_llm, "SELECT * FROM flights")
     assert result == expected_response
 
 
@@ -40,5 +40,5 @@ async def test_generate_natural_response_success(mock_llm):
     mock_llm.arun.return_value = mock_response
 
     expected_response = {"status": True, "result": mock_response}
-    result = await generate_natural_response("how many flights", "5")
+    result = await generate_natural_response(mock_llm, "how many flights", "5")
     assert result == expected_response

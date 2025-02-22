@@ -7,7 +7,7 @@ from fastapi.responses import HTMLResponse
 import uvicorn
 import logging.config
 
-from app.natural_to_sql import process_query, score_feedback
+from natural_to_sql import process_query, score_feedback
 
 app = FastAPI()
 

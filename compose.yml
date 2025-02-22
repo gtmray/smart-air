@@ -1,0 +1,20 @@
+services:
+  air:
+    build: .
+    container_name: air-container
+    env_file:
+      - .env
+    volumes:
+      - ./src/logs/:/app/src/logs/
+      - ./src/sqlite_db/flights.db:/app/src/sqlite_db/flights.db
+    working_dir: /app
+    command: poetry run python src/app/main.py
+    restart: unless-stopped
+    networks:
+      - air-network
+    ports:
+      - "8020:8020"
+
+networks:
+  air-network:
+    driver: bridge
