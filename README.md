@@ -22,23 +22,23 @@ A natural language interface for querying airline/flight data using LLMs
 
 ### Setup
 
-# Clone the repository
+# 1. Clone the repository
 ```bash
 git clone https://github.com/gtmray/smart-air
 cd smart-air
 ```
 
-# Install poetry
+# 2. Install poetry
 ```bash
 pip install poetry
 ```
 
-# Install dependencies
+# 3. Install dependencies
 ```bash
 poetry install
 ```
 
-# Configure environment variables for LLM access and API configurations (in .env file)
+# 4. Configure environment variables for LLM access and API configurations (in .env file)
 ```bash
 HOSTNAME=localhost
 PORT=<YOUR_AVAILABLE_PORT>
@@ -51,20 +51,20 @@ API_KEY=<YOUR_API_KEY>
 MODEL_NAME=<YOUR_MODEL_NAME>
 ```
 
-# Store raw files downloaded from Kaggle using KaggleHub to src/sqlite_db/raw_data
+# 5. Store raw files downloaded from Kaggle using KaggleHub to src/sqlite_db/raw_data
 See: https://github.com/Kaggle/kagglehub or download from kaggle UI
 
-# Create database
+# 6. Create database
 ```bash
 poetry run python src/sqlite_db/create.py
 ```
 
-# Start the application
+# 7. Start the application
 ```bash
 poetry run src/app/main.py
 ```
 
-# Access the web interface
+# 8. Access the web interface
 ```bash
 http://localhost:<YOUR_ASSIGNED_PORT>
 ```
@@ -72,6 +72,10 @@ http://localhost:<YOUR_ASSIGNED_PORT>
 ## Future Improvements
 
 - Integrate industry standard database
+- Implement caching for frequently asked queries
+- Improve UI/UX for better user experience
+- Optimize query execution performance
+- Consider LLM’s token limit and output result consider it
 - Add support for real-time streaming data
 - Explore multi-model orchestration for complex queries
 - Expand testing coverage to include performance benchmarks

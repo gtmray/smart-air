@@ -21,4 +21,4 @@ class LLMConfig:
     langfuse_enable: bool = True
     trace_id: str = str(uuid7())
     trace_name: str = "Air Q&A"
-    track_model_name: str = "gpt4o"  # llama-3.3-70b-versatile
+    track_model_name: str = "gpt-4o"
